@@ -1,0 +1,101 @@
+extends layout
+
+block content
+
+    .container
+            nav(class='navbar navbar-dark bg-dark')
+                a(class='navbar-brand', href='#')
+                    img(
+                        src='\public\images\register.svg'
+                        width='30'
+                        height='30'
+                        class='d-inline-block align-top'
+                        alt=''
+                    )
+                    h2 | Registeration |
+
+    .container.mt-3
+            .row
+                .col-12.col-sm-6
+                    h2= (user ? 'Edit User' : 'Add User')
+                    form(action=(user ? "/users/edit/" + user._id : '/users/add'), method="post")
+                        .row
+                            .form-group.col-6
+                                label(for="") Firstname
+                                input(type="text", name="firstname", class="form-control" placeholder="Enter your firstname" value=(user ? user.firstname: ''))
+                            .form-group.col-6
+                                label(for="") Lastname
+                                input(type="text", name="lastname", class="form-control" placeholder="Enter your lastname" value=(user ? user.lastname: ''))
+                            .form-group.col-2
+                                label(for="") Age
+                                input(type="text", name="age", class="form-control" placeholder="age" value=(user ? user.age: '')) 
+                            .form-group.col-10
+                                label(for="") Email
+                                input(type="text", name="email", class="form-control" placeholder="ex. fistnmame@gmail.com" value=(user ? user.email: ''))
+                            .form-group.col-12
+                                label(for="") Status
+                                select(name="status", class="form-control",  placeholder="status")
+                                    option(value="Active" selected=(user && user.status == "Active")) Active
+                                    option(value="Pending" selected=(user && user.status == "Pending")) Pending
+                                    option(value="Inactive" selected=(user && user.status == "Inactive")) Inactive
+                        .row
+                            .form-group.col-6
+                                button(type="submit").btn.btn-block.btn-success= (user ? 'Edit' : 'Add')
+                            .form-group.col-6
+                                button(type="reset").btn.btn-block.btn-warning Reset
+                if users
+                    .col-12.col-sm-5.offset-sm-1
+                        h2 Search User
+                        form(action="/users/search", method="post")
+                            .row
+                                .form-group.col-6
+                                    label(for="") Firstname
+                                    input(type="text", name="firstname", class="form-control" placeholder="Search by firstname")
+                                .form-group.col-6
+                                    label(for="") Lastname
+                                    input(type="text", name="lastname", class="form-control" placeholder="Search by lastname")
+                                .form-group.col-3
+                                    label(for="") Age
+                                    input(type="text", name="age", class="form-control" placeholder="age") 
+                                .form-group.col-9
+                                    label(for="") Email
+                                    input(type="text", name="email", class="form-control" placeholder="Search by email")
+                                .form-group.col-12
+                                    label(for="") Status
+                                    select(name="status", class="form-control",  placeholder="status")
+                                        option(value="") Select
+                                        option(value="Active") Active
+                                        option(value="Pending") Pending
+                                        option(value="Inactive") Inactive
+                            .row
+                                .form-group.col-6
+                                    button(type="submit").btn.btn-block.btn-info Search
+
+    if users
+        br
+        div.container
+            h2 Member User
+            hr
+            div.row
+                each user in users
+                    .col-6.col-md-4
+                        h4.text-primary= user.firstname + ' ' + user.lastname
+                        strong= 'Age : ' +user.age
+                        br
+                        strong= 'Email : ' +user.email
+                        br
+                        .mt-2
+                        if user.status == 'Active'
+                            p(class='badge badge-pill badge-success')= 'Status : ' +user.status
+                        else if user.status == 'Inactive'
+                            p(class='badge badge-pill badge-danger')= 'Status : ' +user.status
+                        else if user.status == 'Pending'
+                            p(class='badge badge-pill badge-warning')= 'Status : ' +user.status
+                        div
+                            ul.list-inline
+                                li.list-inline-item
+                                    a(href="/users/edit/" + user._id).btn.btn-primary.btn-sm Edit
+                                li.list-inline-item
+                                    form(action="/users/delete/" + user._id, method="post")
+                                        button(type="submit").btn.btn-danger.btn-sm Delete
+                        hr
