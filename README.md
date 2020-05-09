@@ -6,4 +6,3 @@ Version Control with GIT
 -This is master 2
 -conflic
 -test connection git from surface
--New branch
