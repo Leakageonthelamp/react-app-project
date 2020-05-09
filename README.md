@@ -7,3 +7,4 @@ Version Control with GIT
 -conflic
 -test connection git from surface
 -New branch
+-up from new branch
